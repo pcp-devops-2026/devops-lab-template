@@ -15,7 +15,7 @@ This repository is the **reference implementation** — a forkable starting poin
 | [Notifications](services/notifications/) | 5004 | User notifications |
 | [Portal](services/portal/) | 8000 | Student dashboard, aggregates other services |
 
-Each service includes a Flask skeleton with mock data, a `GET /health` endpoint, pytest tests, an OpenAPI spec, and a multi-stage Dockerfile.
+Each service includes a Flask skeleton with mock data, a `GET /health` endpoint, pytest tests, an OpenAPI spec, a multi-stage Dockerfile, and **Swagger UI** at `/apidocs`.
 
 ## Getting Started
 
@@ -57,7 +57,20 @@ cd services/<service-name>
 PYTHONPATH=. pytest tests/ -v
 ```
 
-### 6. Run all services with Docker Compose
+### 6. Browse the API docs
+
+Each service serves interactive Swagger UI:
+
+| Service | Swagger UI |
+|---------|------------|
+| Auth | http://localhost:5000/apidocs |
+| Catalog | http://localhost:5001/apidocs |
+| Enrollment | http://localhost:5002/apidocs |
+| Grades | http://localhost:5003/apidocs |
+| Notifications | http://localhost:5004/apidocs |
+| Portal | http://localhost:8000/apidocs |
+
+### 7. Run all services with Docker Compose
 
 ```bash
 docker compose up
