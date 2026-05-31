@@ -35,8 +35,9 @@ Run `./setup.sh` to verify everything you need is installed.
 ├── .editorconfig       ← consistent indentation across editors
 ├── setup.sh            ← toolchain verification
 ├── docs/               ← project docs (CALMS reflection, ADRs, architecture)
-└── .github/
-└── PULL_REQUEST_TEMPLATE.md
+│   └── ...
+├── .github/
+│   └── PULL_REQUEST_TEMPLATE.md
 ```
 
 ## The Weekly Ritual
