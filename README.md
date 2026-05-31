@@ -28,6 +28,7 @@ Run `./setup.sh` to verify everything you need is installed.
 
 ## Repo structure
 
+```
 ├── README.md           ← edit this to describe your project
 ├── LICENCE             ← MIT
 ├── .gitignore          ← Python + IDE + OS junk
@@ -36,6 +37,7 @@ Run `./setup.sh` to verify everything you need is installed.
 ├── docs/               ← project docs (CALMS reflection, ADRs, architecture)
 └── .github/
 └── PULL_REQUEST_TEMPLATE.md
+```
 
 ## The Weekly Ritual
 
