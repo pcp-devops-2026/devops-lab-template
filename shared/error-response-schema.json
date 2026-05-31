@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ErrorResponse",
+  "description": "Standard error response format for all CampusHub services",
+  "type": "object",
+  "properties": {
+    "error": {
+      "type": "string",
+      "description": "Machine-readable error code (e.g. NOT_FOUND, UNAUTHORIZED)"
+    },
+    "message": {
+      "type": "string",
+      "description": "Human-readable error description"
+    },
+    "status": {
+      "type": "integer",
+      "description": "HTTP status code"
+    }
+  },
+  "required": ["error", "message", "status"],
+  "additionalProperties": false
+}
