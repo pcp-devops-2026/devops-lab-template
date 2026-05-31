@@ -1,10 +1,13 @@
 """CampusHub Portal Service - Student-facing aggregator portal."""
 
 import os
+from pathlib import Path
 
+from flasgger import Swagger
 from flask import Flask, jsonify
 
 app = Flask(__name__)
+Swagger(app, template_file=str(Path(__file__).resolve().parent.parent / "openapi.yaml"))
 
 # --- Downstream service URLs ---
 AUTH_URL = os.environ.get("AUTH_URL", "http://localhost:5000")

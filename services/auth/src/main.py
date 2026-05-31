@@ -1,10 +1,13 @@
 """CampusHub Auth Service - Authentication and user management."""
 
 import os
+from pathlib import Path
 
+from flasgger import Swagger
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+Swagger(app, template_file=str(Path(__file__).resolve().parent.parent / "openapi.yaml"))
 
 # --- Mock data ---
 USERS = {
