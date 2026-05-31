@@ -1,4 +1,4 @@
-bbbbbbccccopenapi: 3.0.3
+openapi: 3.0.3
 info:
   title: CampusHub Auth Service
   description: Authentication and user management for the CampusHub platform

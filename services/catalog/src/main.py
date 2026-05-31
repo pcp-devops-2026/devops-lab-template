@@ -3,11 +3,21 @@
 import os
 from pathlib import Path
 
-from flasgger import Swagger
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
-Swagger(app, template_file=str(Path(__file__).resolve().parent.parent / "openapi.yaml"))
+
+SPEC_PATH = Path(__file__).resolve().parent.parent / "openapi.yaml"
+app.register_blueprint(
+    get_swaggerui_blueprint("/apidocs", "/apispec.yaml"),
+    url_prefix="/apidocs",
+)
+
+
+@app.route("/apispec.yaml")
+def apispec():
+    return send_file(SPEC_PATH, mimetype="text/yaml")
 
 # --- Mock data ---
 COURSES = {
