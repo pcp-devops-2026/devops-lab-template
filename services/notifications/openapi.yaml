@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: CampusHub Notifications Service
+  description: Sending and retrieving notifications for the CampusHub platform
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5004
+    description: Local development
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  service:
+                    type: string
+                    example: notifications
+
+  /notify:
+    post:
+      summary: Create and send a notification
+      operationId: createNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, message]
+              properties:
+                user_id:
+                  type: string
+                  example: u001
+                message:
+                  type: string
+                  example: Your enrollment has been confirmed
+                type:
+                  type: string
+                  example: info
+                  default: info
+      responses:
+        "201":
+          description: Notification created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+        "400":
+          description: Missing required fields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /notifications/{userId}:
+    get:
+      summary: Get notifications for a user
+      operationId: getNotifications
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: u001
+        - name: unread_only
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: If true, return only unread notifications
+      responses:
+        "200":
+          description: List of notifications for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+components:
+  schemas:
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: n001
+        user_id:
+          type: string
+          example: u001
+        message:
+          type: string
+          example: Welcome to CampusHub!
+        type:
+          type: string
+          example: info
+        read:
+          type: boolean
+          example: false
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-09-01T09:00:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer

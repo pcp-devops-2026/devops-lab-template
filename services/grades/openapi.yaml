@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  title: CampusHub Grades Service
+  description: Student grade management and GPA calculation for the CampusHub platform
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5003
+    description: Local development
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  service:
+                    type: string
+                    example: grades
+
+  /grades/{studentId}:
+    get:
+      summary: Get all grades for a student
+      operationId: getGradesByStudent
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: u001
+      responses:
+        "200":
+          description: List of grades for the student (empty list if none found)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Grade"
+
+  /grades/{studentId}/gpa:
+    get:
+      summary: Calculate GPA for a student
+      operationId: getGpaByStudent
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: u001
+      responses:
+        "200":
+          description: GPA calculation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  student_id:
+                    type: string
+                    example: u001
+                  gpa:
+                    type: number
+                    format: float
+                    example: 3.65
+                  courses_counted:
+                    type: integer
+                    example: 2
+        "404":
+          description: No grades found for student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /grades:
+    post:
+      summary: Create a new grade record
+      operationId: createGrade
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [student_id, course_id, grade, semester]
+              properties:
+                student_id:
+                  type: string
+                  example: u001
+                course_id:
+                  type: string
+                  example: CS101
+                grade:
+                  type: string
+                  example: A
+                semester:
+                  type: string
+                  example: Fall 2026
+      responses:
+        "201":
+          description: Grade record created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Grade"
+        "400":
+          description: Missing required fields or invalid grade value
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    Grade:
+      type: object
+      properties:
+        id:
+          type: string
+          example: g001
+        student_id:
+          type: string
+          example: u001
+        course_id:
+          type: string
+          example: CS101
+        grade:
+          type: string
+          example: A
+        semester:
+          type: string
+          example: Fall 2026
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer

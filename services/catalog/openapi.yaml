@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: CampusHub Catalog Service
+  description: Course catalog and department management for the CampusHub platform
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5001
+    description: Local development
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  service:
+                    type: string
+                    example: catalog
+
+  /courses:
+    get:
+      summary: List all courses
+      operationId: listCourses
+      parameters:
+        - name: department
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter courses by department name
+      responses:
+        "200":
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+
+  /courses/{id}:
+    get:
+      summary: Get a course by ID
+      operationId: getCourse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Course found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        "404":
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /departments:
+    get:
+      summary: List all departments
+      operationId: listDepartments
+      responses:
+        "200":
+          description: List of unique department names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                  - Computer Science
+                  - Mathematics
+                  - English
+
+components:
+  schemas:
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        department:
+          type: string
+        credits:
+          type: integer
+        instructor_id:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer

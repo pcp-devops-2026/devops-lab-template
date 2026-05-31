@@ -1,0 +1,135 @@
+openapi: 3.0.3
+info:
+  title: CampusHub Portal Service
+  description: Student-facing aggregator portal that combines data from other CampusHub services
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  service:
+                    type: string
+                    example: portal
+
+  /dashboard/{studentId}:
+    get:
+      summary: Get student dashboard
+      operationId: getDashboard
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: u001
+      responses:
+        "200":
+          description: Dashboard data for the student
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  student_id:
+                    type: string
+                  name:
+                    type: string
+                  enrolled_courses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        course_id:
+                          type: string
+                        title:
+                          type: string
+                  notifications_count:
+                    type: integer
+                  current_gpa:
+                    type: number
+                    format: float
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /transcript/{studentId}:
+    get:
+      summary: Get student transcript
+      operationId: getTranscript
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: u001
+      responses:
+        "200":
+          description: Transcript data for the student
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  student_id:
+                    type: string
+                  name:
+                    type: string
+                  courses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        course_id:
+                          type: string
+                        title:
+                          type: string
+                        grade:
+                          type: string
+                        credits:
+                          type: integer
+                        semester:
+                          type: string
+                  cumulative_gpa:
+                    type: number
+                    format: float
+                  total_credits:
+                    type: integer
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer

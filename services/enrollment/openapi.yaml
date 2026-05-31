@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  title: CampusHub Enrollment Service
+  description: Course enrollment management for the CampusHub platform
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5002
+    description: Local development
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  service:
+                    type: string
+                    example: enrollment
+
+  /enrollments:
+    get:
+      summary: List enrollments
+      operationId: listEnrollments
+      parameters:
+        - name: student_id
+          in: query
+          required: false
+          description: Filter enrollments by student ID
+          schema:
+            type: string
+            example: u001
+      responses:
+        "200":
+          description: List of enrollments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Enrollment"
+
+    post:
+      summary: Create a new enrollment
+      operationId: createEnrollment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [student_id, course_id, semester]
+              properties:
+                student_id:
+                  type: string
+                  example: u001
+                course_id:
+                  type: string
+                  example: CS101
+                semester:
+                  type: string
+                  example: Fall 2026
+      responses:
+        "201":
+          description: Enrollment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enrollment"
+        "400":
+          description: Missing required fields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /enrollments/{id}:
+    delete:
+      summary: Delete an enrollment by ID
+      operationId: deleteEnrollment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: e001
+      responses:
+        "200":
+          description: Enrollment deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Enrollment e001 deleted
+        "404":
+          description: Enrollment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    Enrollment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: e001
+        student_id:
+          type: string
+          example: u001
+        course_id:
+          type: string
+          example: CS101
+        semester:
+          type: string
+          example: Fall 2026
+        status:
+          type: string
+          enum: [active, dropped, completed]
+          example: active
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: integer
