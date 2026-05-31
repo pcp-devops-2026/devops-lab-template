@@ -4,9 +4,11 @@ import os
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_file
+from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
+CORS(app)
 
 SPEC_PATH = Path(__file__).resolve().parent.parent / "openapi.yaml"
 app.register_blueprint(
