@@ -27,3 +27,22 @@ chmod +x setup.sh
 Run `./setup.sh` to verify everything you need is installed.
 
 ## Repo structure
+
+├── README.md           ← edit this to describe your project
+├── LICENCE             ← MIT
+├── .gitignore          ← Python + IDE + OS junk
+├── .editorconfig       ← consistent indentation across editors
+├── setup.sh            ← toolchain verification
+├── docs/               ← project docs (CALMS reflection, ADRs, architecture)
+└── .github/
+└── PULL_REQUEST_TEMPLATE.md
+
+## The Weekly Ritual
+
+See the [Cohort Handbook](https://github.com/pcp-devops-2026/mentoring-hub/blob/main/README.md) for the 13-step Weekly Ritual you'll run every week from Week 7 onwards.
+
+## Conventional commits
+
+Use prefixes: `feat:`, `fix:`, `docs:`, `chore:`, `test:`, `refactor:`, `ci:`.
+
+Example: `feat: add /healthz endpoint to Flask API`
